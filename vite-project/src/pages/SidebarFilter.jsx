@@ -25,7 +25,7 @@ export default function Sidebar() {
           <h3 className="font-semibold mb-2">Price</h3>
 
           <div className="relative h-16 flex items-end space-x-0.5">
-            {[3, 5, 7, 9, 10, 9, 7, 5, 4].map((height, idx) => (
+            {[3, 5, 7, 9, 10, 9, 7, 5, 4,3].map((height, idx) => (
               <div
                 key={idx}
                 className="bg-blue-200"
