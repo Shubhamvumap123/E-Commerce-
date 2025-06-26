@@ -24,7 +24,7 @@ export default function Sidebar() {
         <div>
           <h3 className="font-semibold mb-2">Price</h3>
 
-          <div className="relative h-16 flex items-end space-x-1">
+          <div className="relative h-16 flex items-end space-x-0.5">
             {[3, 5, 7, 9, 10, 9, 7, 5, 4].map((height, idx) => (
               <div
                 key={idx}
@@ -35,7 +35,7 @@ export default function Sidebar() {
           </div>
 
         <ReactSlider
-  className="w-40 mt-1 flex items-center"  // w-40 = 10rem width
+  className="w-40 mt-1 flex items-center" 
   thumbClassName="bg-white w-5 h-5 rounded-full cursor-pointer border border-blue-700 -mt-0.3" 
   thumbActiveClassName="shadow-lg"
   trackClassName="bg-blue-300 h-2"

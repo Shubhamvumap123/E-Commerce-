@@ -195,9 +195,6 @@ const ProductGrid = () => {
   <span className="text-gray-500 ml-1">({product.rating?.count || 100})</span>
 </div>
 
-                <button className="mt-3 bg-blue-600 text-white text-xs py-2 rounded-lg hover:bg-blue-700 transition">
-                  Add to Cart
-                </button>
               </div>
             ))}
           </div>

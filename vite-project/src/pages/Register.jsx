@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ import navigation
 
 async function registerUser(user) {
     // Save to localStorage
@@ -30,6 +31,8 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+
+    const navigate = useNavigate(); // ✅ initialize navigate
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -67,11 +70,13 @@ const Register = () => {
                 },
                 phone: "",
             };
-console.log("Registering user:", user);
-            // Save user to localStorage and fake API
-           await registerUser(user);
+            await registerUser(user);
+ alert("Registration successful!");
 
+            navigate("/login");
             setSuccess("Registration successful!");
+
+
             setForm({
                 name: "",
                 email: "",
