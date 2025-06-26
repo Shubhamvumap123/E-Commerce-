@@ -1,5 +1,25 @@
 import React, { useState } from "react";
 
+async function registerUser(user) {
+    // Save to localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    users.push(user);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    // Optionally, fake API call
+    try {
+        const res = await fetch('https://fakestoreapi.com/users', {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await res.json();
+        console.log('Fake API user added:', data);
+    } catch (err) {
+        console.log('Fake API error:', err);
+    }
+}
+
 const Register = () => {
     const [form, setForm] = useState({
         name: "",
@@ -7,14 +27,62 @@ const Register = () => {
         password: "",
         confirmPassword: "",
     });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle registration logic here
+        setError("");
+        setSuccess("");
+
+        if (form.password !== form.confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const user = {
+                email: form.email,
+                username: form.name,
+                password: form.password,
+                name: {
+                    firstname: form.name.split(" ")[0] || "",
+                    lastname: form.name.split(" ")[1] || "",
+                },
+                address: {
+                    city: "",
+                    street: "",
+                    number: 0,
+                    zipcode: "",
+                    geolocation: {
+                        lat: "",
+                        long: "",
+                    },
+                },
+                phone: "",
+            };
+console.log("Registering user:", user);
+            // Save user to localStorage and fake API
+           await registerUser(user);
+
+            setSuccess("Registration successful!");
+            setForm({
+                name: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+            });
+        } catch (err) {
+            setError(err.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -82,11 +150,18 @@ const Register = () => {
                             autoComplete="new-password"
                         />
                     </div>
+                    {error && (
+                        <div className="text-red-600 text-sm text-center">{error}</div>
+                    )}
+                    {success && (
+                        <div className="text-green-600 text-sm text-center">{success}</div>
+                    )}
                     <button
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
+                        disabled={loading}
                     >
-                        Register
+                        {loading ? "Registering..." : "Register"}
                     </button>
                 </form>
                 <p className="mt-4 text-center text-sm text-gray-600">

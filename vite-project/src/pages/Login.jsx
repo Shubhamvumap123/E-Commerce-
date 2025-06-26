@@ -1,16 +1,76 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [form, setForm] = useState({ email: "", password: "" });
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(""); // Success message state
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    // Helper: Check user in localStorage if API login fails
+    const checkLocalUser = (username, password) => {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const user = users.find(
+            (u) => u.email === username && u.password === password
+        );
+        if (user) {
+            localStorage.setItem("token", "fake-jwt-token");
+            return true;
+        }
+        return false;
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log(form);
+        setError("");
+        setSuccess("");
+        try {
+            const response = await fetch("https://fakestoreapi.com/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: form.email,
+                    password: form.password,
+                }),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.token) {
+                    setSuccess("Login successful! Redirecting to Product...");
+                    setTimeout(() => {
+                        navigate("/product");
+                    }, 1500);
+                } else {
+                    const found = checkLocalUser(form.email, form.password);
+                    if (found) {
+                        setSuccess("Login successful! Redirecting to Product...");
+                        setTimeout(() => {
+                            navigate("/product");
+                        }, 1500);
+                    } else {
+                        window.alert("Login failed: Invalid credentials.");
+                        setError("Invalid credentials. Please try again.");
+                    }
+                }
+            } else {
+                const found = checkLocalUser(form.email, form.password);
+                if (found) {
+                    setSuccess("Login successful! Redirecting to Product...");
+                    setTimeout(() => {
+                        navigate("/product");
+                    }, 1500);
+                } else {
+                    window.alert("Login failed: Invalid credentials.");
+                    setError("Invalid credentials. Please try again.");
+                }
+            }
+        } catch (err) {
+            setError("Something went wrong. Please try again.");
+        }
     };
 
     return (
@@ -48,6 +108,12 @@ const Login = () => {
                             autoComplete="current-password"
                         />
                     </div>
+                    {error && (
+                        <div className="text-red-500 text-sm text-center">{error}</div>
+                    )}
+                    {success && (
+                        <div className="text-green-600 text-sm text-center">{success}</div>
+                    )}
                     <button
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"

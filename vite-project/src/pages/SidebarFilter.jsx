@@ -1,11 +1,14 @@
-import React from 'react';
-import { Star, Heart, Search, ShoppingCart } from 'lucide-react';
+import { Star } from 'lucide-react';
+import React, { useState } from 'react';
+import ReactSlider from 'react-slider';
 
-// Inline Sidebar component defined here to avoid file not found error
-const SidebarFilters = () => {
+export default function Sidebar() {
+  const [priceRange, setPriceRange] = useState([29000, 29000]);
+
   return (
     <aside className="hidden md:block">
       <div className="border rounded p-4 space-y-6">
+        
         {/* Category Filter */}
         <div>
           <h3 className="font-semibold mb-2">Category</h3>
@@ -20,10 +23,34 @@ const SidebarFilters = () => {
         {/* Price Filter */}
         <div>
           <h3 className="font-semibold mb-2">Price</h3>
-          <div className="h-16 bg-gray-100 rounded" /> {/* Placeholder for price chart */}
+          
+          {/* Price histogram bars (mock-up as per image) */}
+          <div className="relative h-16 flex items-end space-x-1">
+            {[3, 5, 7, 9, 10, 9, 7, 5, 4].map((height, idx) => (
+              <div
+                key={idx}
+                className="bg-blue-200"
+                style={{ width: '8%', height: `${height * 10}%` }}
+              />
+            ))}
+          </div>
+
+          {/* Price Range Slider */}
+          <ReactSlider
+            className="w-full mt-2"
+            thumbClassName="bg-blue-500 w-4 h-4 rounded-full cursor-pointer"
+            trackClassName="bg-blue-300 h-1"
+            min={29000}
+            max={29000}
+            value={priceRange}
+            onChange={setPriceRange}
+            pearling
+            minDistance={0}
+          />
+
           <div className="flex justify-between text-xs mt-1">
-            <span>28,000 INR</span>
-            <span>29,000 INR</span>
+            <span>{priceRange[0]} INR</span>
+            <span>{priceRange[1]} INR</span>
           </div>
         </div>
 
@@ -39,8 +66,8 @@ const SidebarFilters = () => {
             </div>
           ))}
         </div>
+
       </div>
     </aside>
   );
-};
-export default SidebarFilters;
+}
