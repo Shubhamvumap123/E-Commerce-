@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import ReactSlider from 'react-slider';
 
 export default function Sidebar() {
-  const [priceRange, setPriceRange] = useState([29000, 29000]);
+  const [priceRange, setPriceRange] = useState([20000, 40000]);
 
   return (
     <aside className="hidden md:block">
@@ -23,8 +23,7 @@ export default function Sidebar() {
         {/* Price Filter */}
         <div>
           <h3 className="font-semibold mb-2">Price</h3>
-          
-          {/* Price histogram bars (mock-up as per image) */}
+
           <div className="relative h-16 flex items-end space-x-1">
             {[3, 5, 7, 9, 10, 9, 7, 5, 4].map((height, idx) => (
               <div
@@ -35,22 +34,24 @@ export default function Sidebar() {
             ))}
           </div>
 
-          {/* Price Range Slider */}
-          <ReactSlider
-            className="w-full mt-2"
-            thumbClassName="bg-blue-500 w-4 h-4 rounded-full cursor-pointer"
-            trackClassName="bg-blue-300 h-1"
-            min={29000}
-            max={29000}
-            value={priceRange}
-            onChange={setPriceRange}
-            pearling
-            minDistance={0}
-          />
+        <ReactSlider
+  className="w-40 mt-1 flex items-center"  // w-40 = 10rem width
+  thumbClassName="bg-white w-5 h-5 rounded-full cursor-pointer border border-blue-700 -mt-0.3" 
+  thumbActiveClassName="shadow-lg"
+  trackClassName="bg-blue-300 h-2"
+  min={10000}
+  max={50000}
+  value={priceRange}
+  onChange={setPriceRange}
+  pearling
+  minDistance={1000}
+/>
 
-          <div className="flex justify-between text-xs mt-1">
-            <span>{priceRange[0]} INR</span>
-            <span>{priceRange[1]} INR</span>
+
+
+          <div className="flex justify-between text-xs mt-4">
+            <span>{priceRange[0]}INR</span>
+            <span>{priceRange[1]}INR</span>
           </div>
         </div>
 
@@ -62,7 +63,6 @@ export default function Sidebar() {
               {[...Array(stars)].map((_, i) => (
                 <Star key={i} size={14} fill="#F59E0B" />
               ))}
-              <span className="text-gray-600 ml-2">& up</span>
             </div>
           ))}
         </div>
