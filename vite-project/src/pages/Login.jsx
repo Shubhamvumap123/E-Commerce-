@@ -68,7 +68,7 @@ const Login = () => {
                     setError("Invalid credentials. Please try again.");
                 }
             }
-        } catch (err) {
+        } catch (err) { // eslint-disable-line no-unused-vars
             setError("Something went wrong. Please try again.");
         }
     };
